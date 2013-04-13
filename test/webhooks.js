@@ -64,16 +64,19 @@ describe("webhooks", function(){
         rimraf(tmpFile, done);
       });
     });
-    it("should return an array with results", function(done){
+    it("should return an object with results", function(done){
       var db = levelup(tmpFile);
-      var urls = ["http://www.paypal.com"];
-      db.put("webhooks", JSON.stringify(urls), function(err){
+      var url = "http://www.paypal.com";
+      var key = "ohgodohgodohgod";
+      db.put(url, key, function(err){
         if (err) done(err);
         db.close(function(){
           var hook = webhooks(tmpFile);
           hook.get(function(err, hooks){
+            var obj = {};
+            obj[url] = key;
             should.not.exist(err);
-            hooks.should.eql(urls);
+            hooks.should.eql(obj);
             hook._db.close();
             rimraf(tmpFile, done);
           });
@@ -98,7 +101,7 @@ describe("webhooks", function(){
       var url = "http://www.paypal.com";
       hook.add(url, function(err){
         hook.get(function(err, val){
-          val.should.eql([url]);
+          Object.keys(val).should.eql([url]);
           done(err);
         });
       });
@@ -108,10 +111,17 @@ describe("webhooks", function(){
       hook.add(url, function(err){
         hook.add(url.toUpperCase(), function(err){
           hook.get(function(err, val){
-            val.should.eql([url]);
+            Object.keys(val).should.eql([url]);
             done(err);
           });
         });
+      });
+    });
+    it("should return an auth token", function(done){
+      var url = "http://www.paypal.com";
+      hook.add(url, function(err, token){
+        token.should.have.length(40);
+        done();
       });
     });
   });
