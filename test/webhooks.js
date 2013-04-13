@@ -54,7 +54,7 @@ describe("webhooks", function(){
 
   });
 
-  describe("#get()", function(){
+  describe(".get()", function(){
     it("should return an empty array on new db", function(done){
       var hook = webhooks(tmpFile);
       hook.get(function(err, hooks){
@@ -85,7 +85,7 @@ describe("webhooks", function(){
     });
   });
 
-  describe("#add()", function(){
+  describe(".add()", function(){
     var hook;
     beforeEach(function(){
       hook = webhooks(tmpFile);
@@ -123,6 +123,25 @@ describe("webhooks", function(){
         token.should.have.length(40);
         done();
       });
+    });
+  });
+
+  describe("#sign()", function(){
+    it("should calculate the proper hmac", function(){
+      var signed = webhooks.sign("http://www.paypal.com", "abcdef", {
+        t:1234567,
+        r:1234567
+      });
+      signed.should.be.an.object;
+      signed.signature.should.equal("034e2f39fed53242bcdfefc2afc519a9fd28abc3");
+    });
+  });
+
+  describe("#verify()", function(){
+    it("should validate the hmac correctly", function(){
+      var signed = webhooks.sign("http://www.paypal.com", "abcdef");
+      webhooks.verify(signed.url, signed.signature, "abcdef").should.be.true;
+      webhooks.verify(signed.url, signed.signature, "fedcba").should.be.false;
     });
   });
 
