@@ -1,0 +1,26 @@
+{
+  "name": "popcorn-webhook",
+  "version": "0.0.0",
+  "description": "popcorn listener that calls webhooks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "popcorn"
+  ],
+  "author": "Jean-Charles Sisk",
+  "license": "BSD",
+  "dependencies": {
+    "redis": "~0.8.3",
+    "levelup": "~0.7.0",
+    "rc": "~0.1.1",
+    "kue": "~0.6.2"
+  },
+  "devDependencies": {
+    "mocha": "~1.9.0",
+    "should": "~1.2.2",
+    "rimraf": "~2.1.4"
+  }
+}
