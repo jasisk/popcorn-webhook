@@ -3,12 +3,12 @@ var should = require("should"),
     fs = require("fs"),
     rimraf = require("rimraf"),
     tmpFile = path.join(__dirname, "/tmp.db"),
-    levelup = require('levelup'),
+    levelup = require("levelup"),
     webhooks = require("../lib/webhooks");
 
 describe("webhooks", function(){
   describe("constructor", function(){
-    describe("syncronous", function(){
+    describe("synchronous", function(){
       var hook;
       before(function(){
         hook = webhooks(tmpFile);
@@ -28,7 +28,7 @@ describe("webhooks", function(){
       });
     });
 
-    describe("asyncronous", function(){
+    describe("asynchronous", function(){
       var hook;
       before(function(done){
         webhooks(tmpFile, function(err, db){
@@ -125,6 +125,7 @@ describe("webhooks", function(){
   });
 
   describe(".getToken()", function(){
+    // I should stub out .list()
     var hook;
     beforeEach(function(){
       hook = webhooks(tmpFile);
@@ -200,6 +201,7 @@ describe("webhooks", function(){
       });
     });
     it("should return the list properly signed", function(done){
+      // I should probably stub out #sign() and avoid .getToken() and #verify()
       hook.signedList(function(err, list){
         should.not.exist(err);
         list.should.have.length(1);
